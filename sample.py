@@ -14,8 +14,15 @@ class MyValue:#評価指標クラス
         self.kaihou=0
 
 worddict=dict()
+dicpn=dict()
 count=0
+pnnum=0
 Myvalue=MyValue()
+
+with open('pn_ja.dic') as file:
+    for line in file:
+        line=line.rstrip('\n').split(':')
+        dicpn[line[0]]=line[3]
 
 f = open('pr.txt','r',encoding = "utf_8")#prファイル読み込み
 pr = f.read()
@@ -37,6 +44,9 @@ prdict = dict(analyzer.analyze(pr))#prdictに単語と数を格納
 print(prdict)
 prwords=list(prdict.keys())#prwordsに自己PRの単語リストを作る
 for checkwords in prwords:
+    if(checkwords in dicpn):
+        print(checkwords)
+        pnnum=pnnum+float(dicpn[checkwords])
     if(checkwords in worddict):
         print(checkwords)
         wordstimes=int(prdict[checkwords])
@@ -55,7 +65,7 @@ Myvalue.seijitu=round(Myvalue.seijitu*100/sum,1)
 Myvalue.tyouwa=round(Myvalue.tyouwa*100/sum,1)
 Myvalue.gaikou=round(Myvalue.gaikou*100/sum,1)
 
-
+print(pnnum)
 print("あなたの外交度は.."+str(Myvalue.gaikou)+"%")
 print("あなたの協調性は.."+str(Myvalue.tyouwa)+"%")
 print("あなたの誠実さは.."+str(Myvalue.seijitu)+"%")
